@@ -1,6 +1,6 @@
 from pygame.math import *
-from HexMetrics import *
-from HexCoordinates import *
+from hex_metrics import *
+from hex_coordinates import *
 
 class Player(object):
     def __init__(self, position = Vector2(0,0)):

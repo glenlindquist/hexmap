@@ -11,10 +11,10 @@ import pygame.gfxdraw
 from pygame.math import *
 from pygame.locals import *
 
-from HexMetrics import *
-from HexChunk import *
-from HexGrid import *
-from HexMesh import *
+from hex_metrics import *
+from hex_chunk import *
+from hex_grid import *
+from hex_mesh import *
 from player import *
 
 # Setup pygame/window ---------------------------------------- #
