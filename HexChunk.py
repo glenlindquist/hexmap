@@ -3,9 +3,12 @@ from HexMetrics import *
 from HexCoordinates import *
 from HexMesh import *
 from HexCell import *
-pygame.init()
+#pygame.init()
 class HexChunk(object):
-    font = pygame.font.Font(None, 30)
+    # need a better way to get coordinates written so we don't need to init pygame twice
+    # font = pygame.font.Font(None, 30)
+
+    CHUNK_FOLDER = "chunk_data/"
     
     SURFACE_PADDING = Vector2(100,100)
     
@@ -26,7 +29,7 @@ class HexChunk(object):
     def update(self):
         self.triangulate()
         self.triangles_to_surface()
-        self.render_coordinates()
+        #self.render_coordinates()
         self.surface = pygame.Surface.convert_alpha(self.surface)
 
         self.enabled = False
@@ -81,12 +84,12 @@ class HexChunk(object):
 
     def serialize(self):
         chunk_properties = []
-        for cell in self.cells:
-            chunk_properties.append(cell.colors)
-        with open(str(self.coordinates), 'wb') as handle:
+        for i in range(len(self.cells)):
+            chunk_properties.append(self.cells[i].colors)
+        with open(self.CHUNK_FOLDER + str(self.coordinates), 'wb') as handle:
             pickle.dump(chunk_properties, handle, protocol=pickle.HIGHEST_PROTOCOL)
     def deserialize(self):
-        with open(str(self.coordinates), 'rb') as handle:
+        with open(self.CHUNK_FOLDER + str(self.coordinates), 'rb') as handle:
             chunk_properties = pickle.load(handle)
         i = 0
         for y in range(HexMetrics().chunk_size_y):

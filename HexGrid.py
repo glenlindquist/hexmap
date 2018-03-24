@@ -2,6 +2,7 @@ from pygame.math import *
 from HexCell import *
 from HexMetrics import *
 from HexChunk import *
+from pathlib import Path
 
 class HexGrid(object):
     def __init__(self, chunk_count_x = 1, chunk_count_y = 1):
@@ -26,15 +27,23 @@ class HexGrid(object):
     def load_chunks(self, player):
         for offset in HexMetrics().chunk_offsets:
             chunk_position = player.chunk.to_position() + Vector2(offset[0], offset[1])
-            if str(chunk_position) in self.chunk_dict:
-                print("hanging on to chunk")
-            else:
+            chunk_file = Path(HexChunk.CHUNK_FOLDER + str(HexCoordinates().from_position(chunk_position)))
+            if str(HexCoordinates().from_position(chunk_position)) in self.chunk_dict:
+                # keep using the chunk from the dict of active chunks
+                pass
+            elif chunk_file.is_file():
+                # load chunk from file
                 chunk = HexChunk(chunk_position)
+                chunk.deserialize()
                 self.chunks.append(chunk)
                 self.chunk_dict[str(chunk.coordinates)] = chunk
+            else:
+                # create new chunk
+                chunk = HexChunk(chunk_position)
                 chunk.create_cells()
-        for key in self.chunk_dict:
-            print("dict:", key)
+                self.chunks.append(chunk)
+                self.chunk_dict[str(chunk.coordinates)] = chunk
+
 
     def unload_chunks(self, player):
         chunks_to_remove = list(chunk for chunk in self.chunk_dict if
@@ -46,7 +55,7 @@ class HexGrid(object):
             del self.chunk_dict[chunk]
 
     def create_chunks(self):
-        """if you wanted to create x * y chunks. currently replaced by load_chunks"""
+        """if you wanted to create x * y chunks. currently unused, replaced by load_chunks"""
         for y in range(self.chunk_count_y):
             for x in range(self.chunk_count_x):
                 self.create_chunk(x, y)
