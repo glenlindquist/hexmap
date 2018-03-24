@@ -36,7 +36,7 @@ class HexMetrics(object):
     noise_dimension_y = 512
     noise_surface = pygame.image.load(noise_source)
     noise_scale = 1.0
-    cell_perturb_strength =  0.025 * SCALE
+    cell_perturb_strength = 0.025 * SCALE
     
     # pointy-topped hex, starting at top, going clockwise
     corners = [

@@ -10,17 +10,17 @@ class HexCell(object):
         self.neighbors = []
         self.chunk = 0
         self.coordinates = HexCoordinates().from_position((self.position))
-        self.type = 0 # determines grass, desert, water, etc
-        self.colors = self.generate_colors(self.type)
+        self.terrain = 0 # determines grass, desert, water, etc
+        self.colors = self.generate_colors(self.terrain)
 
-    def change_type(self, new_type):
-        self.type = new_type
-        self.colors = self.generate_colors(new_type)
+    def change_terrain(self, new_terrain):
+        self.terrain = new_terrain
+        self.colors = self.generate_colors(new_terrain)
         self.chunk.enabled = True
         self.chunk.changed = True
 
-    def generate_colors(self, type):
-        if type == 0:
+    def generate_colors(self, terrain):
+        if terrain == 0:
             return [
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100)),
@@ -29,16 +29,16 @@ class HexCell(object):
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100))
             ]
-        elif type == 1:
+        elif terrain == 1:
             return [
-                (random.randint(20, 100), random.randint(20, 100), 120),
-                (random.randint(20, 100), random.randint(20, 100), 120),
-                (random.randint(20, 100), random.randint(20, 100), 120),
-                (random.randint(20, 100), random.randint(20, 100), 120),
-                (random.randint(20, 100), random.randint(20, 100), 120),
-                (random.randint(20, 100), random.randint(20, 100), 120)
+                (random.randint(20, 70), random.randint(20, 100), 120),
+                (random.randint(20, 70), random.randint(20, 100), 120),
+                (random.randint(20, 70), random.randint(20, 100), 120),
+                (random.randint(20, 70), random.randint(20, 100), 120),
+                (random.randint(20, 70), random.randint(20, 100), 120),
+                (random.randint(20, 70), random.randint(20, 100), 120)
             ]
-        elif type == 2:
+        elif terrain == 2:
             return [
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100)),
@@ -47,7 +47,7 @@ class HexCell(object):
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100))
             ]
-        elif type == 3:
+        elif terrain == 3:
             return [
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100)),

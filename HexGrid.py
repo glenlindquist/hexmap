@@ -50,7 +50,8 @@ class HexGrid(object):
             del self.chunk_dict[chunk]
 
     def get_cell_at_pos(self, position):
-        chunk_coords = HexCoordinates().chunk_coordinates_containing(position)
+        # currently can promise correct cell only if nothing is perturbed.
+        chunk_coords = HexCoordinates().chunk_coords_containing_pos(position)
         for cell in self.chunk_dict[str(chunk_coords)].cells:
             if cell.coordinates == HexCoordinates().from_position(position):
                 return cell

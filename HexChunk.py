@@ -21,7 +21,8 @@ class HexChunk(object):
         self.surface = pygame.Surface(
             (HexMetrics().chunk_width * 1.5, HexMetrics().chunk_height * 1.5),
             pygame.SRCALPHA)
-        self.surface.fill((0,0,0,0))
+        self.surface.fill((0, 0, 0, 0))
+        self.bounding_rect = self.surface.get_bounding_rect(1)
         self.changed = False
 
     def __eq__(self, other):
@@ -30,8 +31,10 @@ class HexChunk(object):
     def update(self):
         self.triangulate()
         self.triangles_to_surface()
-        #self.render_coordinates()
+        # self.render_coordinates()
         self.surface = pygame.Surface.convert_alpha(self.surface)
+        self.bounding_rect = self.surface.get_bounding_rect(1)
+        # print(self.bounding_rect)
         self.enabled = False
 
     def create_cells(self):
@@ -85,7 +88,7 @@ class HexChunk(object):
         chunk_properties = []
         for i in range(len(self.cells)):
             chunk_properties.append(self.cells[i].colors)
-            chunk_properties.append(self.cells[i].type)
+            chunk_properties.append(self.cells[i].terrain)
         with open(self.CHUNK_FOLDER + str(self.coordinates), 'wb') as handle:
             pickle.dump(chunk_properties, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -103,7 +106,7 @@ class HexChunk(object):
                 cell = HexCell(cell_position.x, cell_position.y)
                 cell.colors = chunk_properties[i]
                 i += 1
-                cell.type = int(chunk_properties[i])
+                cell.terrain = int(chunk_properties[i])
                 i += 1
                 cell.chunk = self
                 self.cells.append(cell)

@@ -44,7 +44,7 @@ class HexCoordinates(object):
         position.x = (self.x + (position.y / (HexMetrics().outer_radius * 3))) * (HexMetrics().inner_radius * 2)
         return position
 
-    def chunk_coordinates_containing(self, position):
+    def chunk_coords_containing_pos(self, position):
         """Given a position, returns the coordinates of the chunk that contains that position"""
         coordinates = self.from_position(position)
         z_coordinate = coordinates.z - (coordinates.z % HexMetrics().chunk_size_y)
@@ -55,5 +55,5 @@ class HexCoordinates(object):
         )
         return HexCoordinates(x_coordinate, z_coordinate)
 
-    def chunk_position_containing(self, position):
-        return self.chunk_coordinates_containing(position).to_position()
+    def chunk_pos_containing_pos(self, position):
+        return self.chunk_coords_containing_pos(position).to_position()

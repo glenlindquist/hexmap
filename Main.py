@@ -170,7 +170,7 @@ while True:
         player.position.y += PLAYER_SPEED
     if space:
         player_cell = grid.get_cell_at_pos(player.position)
-        player_cell.change_type(1)
+        player_cell.change_terrain(1)
     # Update map --------------------------------------------- #
     if True: #replace with update_display
         # DISPLAYSURF.fill(GREEN)
@@ -183,7 +183,7 @@ while True:
             DISPLAYSURF.blit(chunk.surface, chunk.position + CENTER - player.position - chunk.SURFACE_PADDING)
 
     old_player_chunk = player.chunk
-    player.chunk = HexCoordinates().chunk_coordinates_containing(player.position)
+    player.chunk = HexCoordinates().chunk_coords_containing_pos(player.position)
     if old_player_chunk != player.chunk:
         # print("chunk mismatch")
         grid.load_chunks(player)
