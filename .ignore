@@ -1,4 +1,4 @@
-**/__pycache__
-**/venv1
-**/.idea/workspace.xml
-**/.idea/tasks.xml
+__pycache__/*
+venv1/*
+.idea/workspace.xml
+.idea/tasks.xml
