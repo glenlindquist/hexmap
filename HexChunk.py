@@ -22,6 +22,7 @@ class HexChunk(object):
             (HexMetrics().chunk_width * 1.5, HexMetrics().chunk_height * 1.5),
             pygame.SRCALPHA)
         self.surface.fill((0,0,0,0))
+        self.changed = False
 
     def __eq__(self, other):
         return self.coordinates == other.coordinates
@@ -31,7 +32,6 @@ class HexChunk(object):
         self.triangles_to_surface()
         #self.render_coordinates()
         self.surface = pygame.Surface.convert_alpha(self.surface)
-
         self.enabled = False
 
     def create_cells(self):
@@ -47,7 +47,7 @@ class HexChunk(object):
         cell_position.y += y * (HexMetrics().outer_radius * 1.5)
 
         cell = HexCell(cell_position.x, cell_position.y)
-        # cell.chunk = self
+        cell.chunk = self
         self.cells.append(cell)
 
     def triangulate(self):
@@ -74,7 +74,6 @@ class HexChunk(object):
             )
     
     def render_triangle(self, v1, v2, v3, color = (20, 150, 20)):
-        # pygame.draw.polygon(self.surface, (random.randint(20,100), 150, random.randint(20,100)), (v1, v2, v3))
         pygame.draw.polygon(self.surface, color, (v1, v2, v3))
 
     def render_coordinates(self):
@@ -86,8 +85,10 @@ class HexChunk(object):
         chunk_properties = []
         for i in range(len(self.cells)):
             chunk_properties.append(self.cells[i].colors)
+            chunk_properties.append(self.cells[i].type)
         with open(self.CHUNK_FOLDER + str(self.coordinates), 'wb') as handle:
             pickle.dump(chunk_properties, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
     def deserialize(self):
         with open(self.CHUNK_FOLDER + str(self.coordinates), 'rb') as handle:
             chunk_properties = pickle.load(handle)
@@ -101,6 +102,9 @@ class HexChunk(object):
                 cell_position.y += y * (HexMetrics().outer_radius * 1.5)
                 cell = HexCell(cell_position.x, cell_position.y)
                 cell.colors = chunk_properties[i]
-                #cell.chunk = self
-                self.cells.append(cell)
                 i += 1
+                cell.type = int(chunk_properties[i])
+                i += 1
+                cell.chunk = self
+                self.cells.append(cell)
+

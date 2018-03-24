@@ -23,8 +23,8 @@ class HexMetrics(object):
     
     # Chunk constants
     # Ideally these should be kept to even numbers
-    chunk_size_x = 4
-    chunk_size_y = 4
+    chunk_size_x = 10
+    chunk_size_y = 10
     
     chunk_width = chunk_size_x * hex_width
     # height is different because rows are staggered

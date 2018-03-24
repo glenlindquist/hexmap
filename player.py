@@ -7,7 +7,3 @@ class Player(object):
         self.position = Vector2(position.x, position.y)
         self.coordinates = []
         self.chunk = HexCoordinates().from_position(self.position)
-    #while True:
-    #    pass
-        #self.
-    

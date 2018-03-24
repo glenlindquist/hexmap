@@ -110,13 +110,14 @@ pygame.gfxdraw.filled_circle(player_model, PLAYER_RADIUS, PLAYER_RADIUS, PLAYER_
 # Initialization --------------------------------------------- #
 
 
-grid = HexGrid(2,2)
+grid = HexGrid()
 player = Player(Vector2(0, 0))
 grid.load_chunks(player)
 right = False
 left = False
 up = False
 down = False
+space = False
 
 update_map = True
 redraw_triangles = True
@@ -144,6 +145,8 @@ while True:
                 update_map = True
             elif event.key == K_s:
                 down = True
+            elif event.key == K_SPACE:
+                space = True
         elif event.type == KEYUP:
             key_pressed = False
             if event.key == K_d:
@@ -154,6 +157,8 @@ while True:
                 up = False
             elif event.key == K_s:
                 down = False
+            elif event.key == K_SPACE:
+                space = False
     # Player Movement ---------------------------------------- #
     if right:
         player.position.x += PLAYER_SPEED
@@ -163,7 +168,9 @@ while True:
         player.position.y -= PLAYER_SPEED
     if down:
         player.position.y += PLAYER_SPEED
-        
+    if space:
+        player_cell = grid.get_cell_at_pos(player.position)
+        player_cell.change_type(1)
     # Update map --------------------------------------------- #
     if True: #replace with update_display
         # DISPLAYSURF.fill(GREEN)
@@ -186,9 +193,9 @@ while True:
 
     # Update ------------------------------------------------- #
     fps_counter = font.render(str(int(fpsClock.get_fps())), True, WHITE)
-    player_chunk = font.render(str(player.chunk), True, WHITE)
-    player_cell_position = font.render(str(player.coordinates), True, WHITE)
-    player_position = font.render(str(player.position),True, WHITE)
+    # player_chunk = font.render(str(player.chunk), True, WHITE)
+    # player_cell_position = font.render(str(player.coordinates), True, WHITE)
+    # player_position = font.render(str(player.position),True, WHITE)
     DISPLAYSURF.blit(fps_counter, (50,50))
     # DISPLAYSURF.blit(player_chunk, (50,100))
     DISPLAYSURF.blit(player_model, (CENTER.x - PLAYER_RADIUS, CENTER.y - PLAYER_RADIUS))
