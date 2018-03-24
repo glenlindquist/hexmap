@@ -2,6 +2,7 @@ import pygame, random, pickle
 from HexMetrics import *
 from HexCoordinates import *
 from HexMesh import *
+from HexCell import *
 pygame.init()
 class HexChunk(object):
     font = pygame.font.Font(None, 30)
@@ -27,9 +28,25 @@ class HexChunk(object):
         self.triangles_to_surface()
         self.render_coordinates()
         self.surface = pygame.Surface.convert_alpha(self.surface)
+
         self.enabled = False
 
-        
+    def create_cells(self):
+        for y in range(HexMetrics().chunk_size_y):
+            for x in range(HexMetrics().chunk_size_x):
+                self.create_cell(x, y)
+
+    def create_cell(self, x, y):
+        cell_position = Vector2(0, 0)
+        cell_position.x = self.position.x
+        cell_position.y = self.position.y
+        cell_position.x += (x * 1.0 + y * 0.5 - int(y / 2)) * (HexMetrics().inner_radius * 2.0)
+        cell_position.y += y * (HexMetrics().outer_radius * 1.5)
+
+        cell = HexCell(cell_position.x, cell_position.y)
+        # cell.chunk = self
+        self.cells.append(cell)
+
     def triangulate(self):
         for cell in self.cells:
             self.triangulate_cell(cell)
@@ -63,10 +80,24 @@ class HexChunk(object):
             self.surface.blit(coordinate_surf, HexMetrics().perturb(cell.position) - self.position + self.SURFACE_PADDING + Vector2(-25, -25))
 
     def serialize(self):
+        chunk_properties = []
+        for cell in self.cells:
+            chunk_properties.append(cell.colors)
         with open(str(self.coordinates), 'wb') as handle:
-            for cell in self.cells:
-                pickle.dump(cell.colors, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(chunk_properties, handle, protocol=pickle.HIGHEST_PROTOCOL)
     def deserialize(self):
-        with open(str(self.coordinates), 'wb') as handle:
-            for cell in self.cells:
-                pickle.load(handle)
+        with open(str(self.coordinates), 'rb') as handle:
+            chunk_properties = pickle.load(handle)
+        i = 0
+        for y in range(HexMetrics().chunk_size_y):
+            for x in range(HexMetrics().chunk_size_x):
+                cell_position = Vector2(0, 0)
+                cell_position.x = self.position.x
+                cell_position.y = self.position.y
+                cell_position.x += (x * 1.0 + y * 0.5 - int(y / 2)) * (HexMetrics().inner_radius * 2.0)
+                cell_position.y += y * (HexMetrics().outer_radius * 1.5)
+                cell = HexCell(cell_position.x, cell_position.y)
+                cell.colors = chunk_properties[i]
+                #cell.chunk = self
+                self.cells.append(cell)
+                i += 1
