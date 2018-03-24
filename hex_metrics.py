@@ -31,7 +31,7 @@ class HexMetrics(object):
     chunk_height = chunk_size_y * outer_radius * 1.5
     
     # Perturbation constants
-    noise_source = os.path.join('Textures', 'Noise.png')
+    noise_source = os.path.join('textures', 'Noise.png')
     noise_dimension_x = 512
     noise_dimension_y = 512
     noise_surface = pygame.image.load(noise_source)

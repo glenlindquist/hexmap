@@ -1,5 +1,5 @@
 from pygame.math import *
-from HexMetrics import *
+from hex_metrics import *
 
 class HexCoordinates(object):
     def __init__(self, x = 0, z = 0):

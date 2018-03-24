@@ -1,4 +1,4 @@
-from HexMetrics import *
+from hex_metrics import *
 
 class HexMesh(object):
     

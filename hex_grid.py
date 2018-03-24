@@ -1,7 +1,7 @@
 from pygame.math import *
-from HexCell import *
-from HexMetrics import *
-from HexChunk import *
+from hex_cell import *
+from hex_metrics import *
+from hex_chunk import *
 from pathlib import Path
 
 class HexGrid(object):

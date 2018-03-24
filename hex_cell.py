@@ -1,10 +1,10 @@
 import random
 from pygame.math import *
-from HexMetrics import *
-from HexCoordinates import *
+from hex_metrics import *
+from hex_coordinates import *
+
 
 class HexCell(object):
-    
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = []

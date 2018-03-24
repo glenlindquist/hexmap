@@ -1,8 +1,8 @@
 import pygame, random, pickle
-from HexMetrics import *
-from HexCoordinates import *
-from HexMesh import *
-from HexCell import *
+from hex_metrics import *
+from hex_coordinates import *
+from hex_mesh import *
+from hex_cell import *
 #pygame.init()
 class HexChunk(object):
     # need a better way to get coordinates written so we don't need to init pygame twice
