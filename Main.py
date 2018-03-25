@@ -118,6 +118,7 @@ left = False
 up = False
 down = False
 space = False
+show_edge = False
 
 update_map = True
 redraw_triangles = True
@@ -147,6 +148,8 @@ while True:
                 down = True
             elif event.key == K_SPACE:
                 space = True
+            elif event.key == K_e:
+                show_edge = True
         elif event.type == KEYUP:
             key_pressed = False
             if event.key == K_d:
@@ -159,6 +162,8 @@ while True:
                 down = False
             elif event.key == K_SPACE:
                 space = False
+            elif event.key == K_e:
+                show_edge = False
     # Player Movement ---------------------------------------- #
     if right:
         player.position.x += PLAYER_SPEED
@@ -170,7 +175,11 @@ while True:
         player.position.y += PLAYER_SPEED
     if space:
         player_cell = grid.get_cell_at_pos(player.position)
-        player_cell.change_terrain(1)
+        player_cell.change_terrain((player_cell.terrain + 1))
+    if show_edge:
+        active_chunk = grid.get_chunk_at_pos(player.position)
+        active_chunk.triangulate_edge_cells(active_chunk.get_edge_cells())
+
     # Update map --------------------------------------------- #
     if True: #replace with update_display
         # DISPLAYSURF.fill(GREEN)

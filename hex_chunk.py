@@ -53,6 +53,21 @@ class HexChunk(object):
         cell.chunk = self
         self.cells.append(cell)
 
+    def get_edge_cells(self):
+        i = 0
+        edge_cells = []
+        for y in range(HexMetrics().chunk_size_y):
+            for x in range(HexMetrics().chunk_size_x):
+                if x == 0 or x == HexMetrics().chunk_size_x - 1 or y == 0 or y == HexMetrics().chunk_size_y-1:
+                    edge_cells.append(self.cells[i])
+                i += 1
+        return edge_cells
+
+    def triangulate_edge_cells(self, edge_cells):
+        for cell in edge_cells:
+            cell.change_terrain(3)
+            self.triangulate_cell(cell)
+
     def triangulate(self):
         for cell in self.cells:
             self.triangulate_cell(cell)
@@ -75,7 +90,7 @@ class HexChunk(object):
                 self.mesh.vertices[(i * 3) + 2] - self.position + self.SURFACE_PADDING,
                 self.mesh.colors[i]
             )
-    
+
     def render_triangle(self, v1, v2, v3, color = (20, 150, 20)):
         pygame.draw.polygon(self.surface, color, (v1, v2, v3))
 

@@ -56,4 +56,6 @@ class HexGrid(object):
             if cell.coordinates == HexCoordinates().from_position(position):
                 return cell
 
-
+    def get_chunk_at_pos(self, position):
+        chunk_coords = HexCoordinates().chunk_coords_containing_pos(position)
+        return self.chunk_dict[str(chunk_coords)]

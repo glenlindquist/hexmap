@@ -14,6 +14,8 @@ class HexCell(object):
         self.colors = self.generate_colors(self.terrain)
 
     def change_terrain(self, new_terrain):
+        if new_terrain > 3:
+            new_terrain = 0
         self.terrain = new_terrain
         self.colors = self.generate_colors(new_terrain)
         self.chunk.enabled = True
@@ -31,30 +33,30 @@ class HexCell(object):
             ]
         elif terrain == 1:
             return [
-                (random.randint(20, 70), random.randint(20, 100), 120),
-                (random.randint(20, 70), random.randint(20, 100), 120),
-                (random.randint(20, 70), random.randint(20, 100), 120),
-                (random.randint(20, 70), random.randint(20, 100), 120),
-                (random.randint(20, 70), random.randint(20, 100), 120),
-                (random.randint(20, 70), random.randint(20, 100), 120)
+                (random.randint(20, 50), random.randint(20, 100), 120),
+                (random.randint(20, 50), random.randint(20, 100), 120),
+                (random.randint(20, 50), random.randint(20, 100), 120),
+                (random.randint(20, 50), random.randint(20, 100), 120),
+                (random.randint(20, 50), random.randint(20, 100), 120),
+                (random.randint(20, 50), random.randint(20, 100), 120)
             ]
         elif terrain == 2:
             return [
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100))
+                (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
+                (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
+                (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
+                (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
+                (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
+                (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40))
             ]
         elif terrain == 3:
             return [
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100)),
-                (random.randint(20, 100), 120, random.randint(20, 100))
+                (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
+                (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
+                (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
+                (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
+                (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
+                (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20))
             ]
         else:
             return [
