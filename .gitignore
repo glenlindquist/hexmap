@@ -1,5 +1,6 @@
-# Local saves
+# Hex-specific
 chunk_data/
+testing.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

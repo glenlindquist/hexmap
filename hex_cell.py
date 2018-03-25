@@ -23,6 +23,7 @@ class HexCell(object):
 
     def generate_colors(self, terrain):
         if terrain == 0:
+            # Grass
             return [
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100)),
@@ -32,6 +33,7 @@ class HexCell(object):
                 (random.randint(20, 100), 120, random.randint(20, 100))
             ]
         elif terrain == 1:
+            # Water
             return [
                 (random.randint(20, 50), random.randint(20, 100), 120),
                 (random.randint(20, 50), random.randint(20, 100), 120),
@@ -41,6 +43,7 @@ class HexCell(object):
                 (random.randint(20, 50), random.randint(20, 100), 120)
             ]
         elif terrain == 2:
+            # Sand
             return [
                 (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
                 (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40)),
@@ -50,6 +53,7 @@ class HexCell(object):
                 (random.randint(150, 170), random.randint(120, 140), random.randint(20, 40))
             ]
         elif terrain == 3:
+            # Debug
             return [
                 (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
                 (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20)),
@@ -59,6 +63,7 @@ class HexCell(object):
                 (random.randint(0, 20), random.randint(0, 20), random.randint(0, 20))
             ]
         else:
+            # Default to grass
             return [
                 (random.randint(20, 100), 120, random.randint(20, 100)),
                 (random.randint(20, 100), 120, random.randint(20, 100)),

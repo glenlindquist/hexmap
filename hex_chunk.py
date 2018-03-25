@@ -19,35 +19,42 @@ class HexChunk(object):
         self.mesh = HexMesh()
         self.enabled = True
         self.surface = pygame.Surface(
-            (HexMetrics().chunk_width * 1.5, HexMetrics().chunk_height * 1.5),
+            (HexMetrics.chunk_width * 1.5, HexMetrics.chunk_height * 1.5),
             pygame.SRCALPHA)
         self.surface.fill((0, 0, 0, 0))
-        self.bounding_rect = self.surface.get_bounding_rect(1)
         self.changed = False
 
     def __eq__(self, other):
         return self.coordinates == other.coordinates
+
+    def clear(self):
+        self.position = Vector2(0, 0)
+        self.coordinates = HexCoordinates().from_position(self.position)
+        #del self.cells[:]
+        self.cells = []
+        self.mesh.clear()
+        self.enabled = True
+        self.surface.fill((0, 0, 0, 0))
+        self.changed = False
 
     def update(self):
         self.triangulate()
         self.triangles_to_surface()
         # self.render_coordinates()
         self.surface = pygame.Surface.convert_alpha(self.surface)
-        self.bounding_rect = self.surface.get_bounding_rect(1)
-        # print(self.bounding_rect)
         self.enabled = False
 
     def create_cells(self):
-        for y in range(HexMetrics().chunk_size_y):
-            for x in range(HexMetrics().chunk_size_x):
+        for y in range(HexMetrics.chunk_size_y):
+            for x in range(HexMetrics.chunk_size_x):
                 self.create_cell(x, y)
 
     def create_cell(self, x, y):
         cell_position = Vector2(0, 0)
         cell_position.x = self.position.x
         cell_position.y = self.position.y
-        cell_position.x += (x * 1.0 + y * 0.5 - int(y / 2)) * (HexMetrics().inner_radius * 2.0)
-        cell_position.y += y * (HexMetrics().outer_radius * 1.5)
+        cell_position.x += (x * 1.0 + y * 0.5 - int(y / 2)) * (HexMetrics.inner_radius * 2.0)
+        cell_position.y += y * (HexMetrics.outer_radius * 1.5)
 
         cell = HexCell(cell_position.x, cell_position.y)
         cell.chunk = self
@@ -56,9 +63,9 @@ class HexChunk(object):
     def get_edge_cells(self):
         i = 0
         edge_cells = []
-        for y in range(HexMetrics().chunk_size_y):
-            for x in range(HexMetrics().chunk_size_x):
-                if x == 0 or x == HexMetrics().chunk_size_x - 1 or y == 0 or y == HexMetrics().chunk_size_y-1:
+        for y in range(HexMetrics.chunk_size_y):
+            for x in range(HexMetrics.chunk_size_x):
+                if x == 0 or x == HexMetrics.chunk_size_x - 1 or y == 0 or y == HexMetrics.chunk_size_y-1:
                     edge_cells.append(self.cells[i])
                 i += 1
         return edge_cells
@@ -82,6 +89,7 @@ class HexChunk(object):
         ev2 = center + HexMetrics().get_second_corner(direction)
         self.mesh.add_triangle(center, ev1, ev2, cell.colors[direction])
         
+    # method used for redundant vertices --------------------- #
     def triangles_to_surface(self):
         for i in range(self.mesh.triangles):
             self.render_triangle(
@@ -90,6 +98,17 @@ class HexChunk(object):
                 self.mesh.vertices[(i * 3) + 2] - self.position + self.SURFACE_PADDING,
                 self.mesh.colors[i]
             )
+
+    # method used if vertices shared ------------------------- #
+    #def triangles_to_surface(self):
+    #    indices = self.mesh.indices
+    #    for i in range(self.mesh.triangles):
+    #        self.render_triangle(
+    #            self.mesh.vertices[indices[i * 3]] - self.position + self.SURFACE_PADDING,
+    #            self.mesh.vertices[indices[(i * 3) + 1]] - self.position + self.SURFACE_PADDING,
+    #            self.mesh.vertices[indices[(i * 3) + 2]] - self.position + self.SURFACE_PADDING,
+    #            self.mesh.colors[i]
+    #        )
 
     def render_triangle(self, v1, v2, v3, color = (20, 150, 20)):
         pygame.draw.polygon(self.surface, color, (v1, v2, v3))
@@ -111,13 +130,13 @@ class HexChunk(object):
         with open(self.CHUNK_FOLDER + str(self.coordinates), 'rb') as handle:
             chunk_properties = pickle.load(handle)
         i = 0
-        for y in range(HexMetrics().chunk_size_y):
-            for x in range(HexMetrics().chunk_size_x):
+        for y in range(HexMetrics.chunk_size_y):
+            for x in range(HexMetrics.chunk_size_x):
                 cell_position = Vector2(0, 0)
                 cell_position.x = self.position.x
                 cell_position.y = self.position.y
-                cell_position.x += (x * 1.0 + y * 0.5 - int(y / 2)) * (HexMetrics().inner_radius * 2.0)
-                cell_position.y += y * (HexMetrics().outer_radius * 1.5)
+                cell_position.x += (x * 1.0 + y * 0.5 - int(y / 2)) * (HexMetrics.inner_radius * 2.0)
+                cell_position.y += y * (HexMetrics.outer_radius * 1.5)
                 cell = HexCell(cell_position.x, cell_position.y)
                 cell.colors = chunk_properties[i]
                 i += 1

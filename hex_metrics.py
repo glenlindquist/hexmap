@@ -3,6 +3,7 @@ import os
 from pygame.math import *
 from enum import IntEnum
 
+
 class HexMetrics(object):
     """Defining a Hexagon"""
     # Scale
@@ -32,11 +33,11 @@ class HexMetrics(object):
     
     # Perturbation constants
     noise_source = os.path.join('textures', 'Noise.png')
-    noise_dimension_x = 512
-    noise_dimension_y = 512
     noise_surface = pygame.image.load(noise_source)
+    noise_dimension_x = noise_surface.get_rect().size[0]
+    noise_dimension_y = noise_surface.get_rect().size[1]
     noise_scale = 1.0
-    cell_perturb_strength = 0.025 * SCALE
+    cell_perturb_strength = 0 # 0.025 * SCALE
     
     # pointy-topped hex, starting at top, going clockwise
     corners = [

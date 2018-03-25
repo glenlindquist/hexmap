@@ -51,44 +51,7 @@ def random_green():
 font = pygame.font.Font(None, 30)
 
 # Functions -------------------------------------------------- #
-#def render_mesh(mesh, offset = Vector2(0,0)):
-#    for i in range(mesh.triangles):
-#        render_triangle(
-#            mesh.vertices[mesh.indices[i * 3]] + offset, 
-#            mesh.vertices[mesh.indices[(i * 3) + 1]] + offset, 
-#            mesh.vertices[mesh.indices[(i * 3) + 2]] + offset
-#        )
 
-#Old method, without shared verts
-def render_mesh(surface, mesh, offset = Vector2(0,0)):
-    for i in range(mesh.triangles):
-        render_triangle(
-            surface,
-            mesh.vertices[i * 3] + offset, 
-            mesh.vertices[(i * 3) + 1] + offset, 
-            mesh.vertices[(i * 3) + 2] + offset
-        )
-
-def render_triangle(surface, v1, v2, v3):
-     pygame.draw.polygon(surface, random_green(), ((0,0), (0,50), (50,0)))
-   
-     #pygame.draw.polygon(surface, random_green(), (v1, v2, v3))
-
-#Slower draw methods, but more options
-#    pygame.gfxdraw.filled_trigon(
-#        DISPLAYSURF,
-#        round(v1.x), round(v1.y),
-#        round(v2.x), round(v2.y),
-#        round(v3.x), round(v3.y),
-#        random_green()
-#    )
-#    pygame.gfxdraw.aatrigon(
-#         DISPLAYSURF,
-#        round(v1.x), round(v1.y),
-#        round(v2.x), round(v2.y),
-#        round(v3.x), round(v3.y),
-#        BLACK    
-#    )
 
 
 
@@ -119,6 +82,7 @@ up = False
 down = False
 space = False
 show_edge = False
+idle = True
 
 update_map = True
 redraw_triangles = True
@@ -180,6 +144,11 @@ while True:
         active_chunk = grid.get_chunk_at_pos(player.position)
         active_chunk.triangulate_edge_cells(active_chunk.get_edge_cells())
 
+    if not right and not left and not up and not down and not space and not show_edge:
+        idle = True
+    else:
+        idle = False
+
     # Update map --------------------------------------------- #
     if True: #replace with update_display
         # DISPLAYSURF.fill(GREEN)
@@ -199,6 +168,10 @@ while True:
         grid.unload_chunks(player)
 
     player.coordinates = HexCoordinates().from_position(player.position)
+
+    # Clean-up ----------------------------------------------- #
+    # if idle:
+    #    gc.collect()
 
     # Update ------------------------------------------------- #
     fps_counter = font.render(str(int(fpsClock.get_fps())), True, WHITE)
