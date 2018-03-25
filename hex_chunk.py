@@ -28,9 +28,8 @@ class HexChunk(object):
         return self.coordinates == other.coordinates
 
     def clear(self):
-        self.position = Vector2(0, 0)
-        self.coordinates = HexCoordinates().from_position(self.position)
         #del self.cells[:]
+        del self.cells
         self.cells = []
         self.mesh.clear()
         self.enabled = True
@@ -100,7 +99,7 @@ class HexChunk(object):
             )
 
     # method used if vertices shared ------------------------- #
-    #def triangles_to_surface(self):
+    # def triangles_to_surface(self):
     #    indices = self.mesh.indices
     #    for i in range(self.mesh.triangles):
     #        self.render_triangle(

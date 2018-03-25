@@ -76,6 +76,7 @@ pygame.gfxdraw.filled_circle(player_model, PLAYER_RADIUS, PLAYER_RADIUS, PLAYER_
 grid = HexGrid()
 player = Player(Vector2(0, 0))
 grid.load_chunks(player)
+player.chunk = grid.chunk_dict[str(HexCoordinates().chunk_coords_containing_pos(player.position))]
 right = False
 left = False
 up = False
@@ -150,20 +151,15 @@ while True:
         idle = False
 
     # Update map --------------------------------------------- #
-    if True: #replace with update_display
-        # DISPLAYSURF.fill(GREEN)
+    if True: #replace with some sort of update_display flag
         grid.update()
-        # if redraw_triangles:
-        #    for chunk in grid.chunks:
-        #        render_mesh(chunk.surface, chunk.mesh, (0,0))
-        #    redraw_triangles = False
         for chunk in grid.chunks:
             DISPLAYSURF.blit(chunk.surface, chunk.position + CENTER - player.position - chunk.SURFACE_PADDING)
 
     old_player_chunk = player.chunk
-    player.chunk = HexCoordinates().chunk_coords_containing_pos(player.position)
-    if old_player_chunk != player.chunk:
-        # print("chunk mismatch")
+    player.chunk = grid.chunk_dict[str(HexCoordinates().chunk_coords_containing_pos(player.position))]
+    if old_player_chunk.coordinates != player.chunk.coordinates:
+        # reload chunks if player moves to new chunk
         grid.load_chunks(player)
         grid.unload_chunks(player)
 
