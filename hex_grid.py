@@ -7,7 +7,7 @@ from pathlib import Path
 
 class HexGrid(object):
     def __init__(self):
-        self.chunks = []
+        #self.chunks = []
         self.cell_count_x = 0
         self.cell_count_y = 0
         self.chunk_dict = {}
@@ -30,13 +30,13 @@ class HexGrid(object):
                 # load chunk from file
                 chunk = self.pool.take_from_pool(chunk_position)
                 chunk.deserialize()
-                self.chunks.append(chunk)
+                # self.chunks.append(chunk)
                 self.chunk_dict[str(chunk.coordinates)] = chunk
             else:
                 # create new chunk
                 chunk = self.pool.take_from_pool(chunk_position)
                 chunk.create_cells()
-                self.chunks.append(chunk)
+                # self.chunks.append(chunk)
                 self.chunk_dict[str(chunk.coordinates)] = chunk
 
     # Without chunk-pooling ---------------------------------- #

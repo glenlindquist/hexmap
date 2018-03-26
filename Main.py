@@ -153,8 +153,8 @@ while True:
     # Update map --------------------------------------------- #
     if True: #replace with some sort of update_display flag
         grid.update()
-        for chunk in grid.chunks:
-            DISPLAYSURF.blit(chunk.surface, chunk.position + CENTER - player.position - chunk.SURFACE_PADDING)
+        for chunk in grid.chunk_dict:
+            DISPLAYSURF.blit(grid.chunk_dict[chunk].surface, grid.chunk_dict[chunk].position + CENTER - player.position - grid.chunk_dict[chunk].SURFACE_PADDING)
 
     old_player_chunk = player.chunk
     player.chunk = grid.chunk_dict[str(HexCoordinates().chunk_coords_containing_pos(player.position))]
