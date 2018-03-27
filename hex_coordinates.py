@@ -22,9 +22,9 @@ class HexCoordinates(object):
         offset = position.y / (HexMetrics.outer_radius * 3.0)
         x -= offset
         y -= offset
-        iX = int(round(x))
-        iY = int(round(y))
-        iZ = int(round(-x - y))
+        iX = round(x)
+        iY = round(y)
+        iZ = round(-x - y)
         
         if (iX + iY + iZ) != 0:
             dX = abs(x - iX)
@@ -49,9 +49,9 @@ class HexCoordinates(object):
         coordinates = self.from_position(position)
         z_coordinate = coordinates.z - (coordinates.z % HexMetrics.chunk_size_y)
         x_coordinate = (
-            (coordinates.x + (coordinates.z/2.0)) -
-            ((coordinates.x + (coordinates.z / 2.0)) % HexMetrics.chunk_size_x) -
-            (z_coordinate / 2.0)
+            (coordinates.x + (coordinates.z / 2))
+            - ((coordinates.x + (coordinates.z / 2)) % HexMetrics.chunk_size_x)
+            - (z_coordinate / 2)
         )
         return HexCoordinates(x_coordinate, z_coordinate)
 

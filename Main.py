@@ -154,7 +154,22 @@ while True:
     if True: #replace with some sort of update_display flag
         grid.update()
         for chunk in grid.chunk_dict:
-            DISPLAYSURF.blit(grid.chunk_dict[chunk].surface, grid.chunk_dict[chunk].position + CENTER - player.position - grid.chunk_dict[chunk].SURFACE_PADDING)
+            draw = True
+            chunk_screen_pos = \
+                grid.chunk_dict[chunk].position \
+                + CENTER \
+                - player.position  \
+                - grid.chunk_dict[chunk].SURFACE_PADDING
+            if (chunk_screen_pos.x + grid.chunk_dict[chunk].SURFACE_PADDING.x < -HexMetrics.chunk_width or
+                    chunk_screen_pos.x + grid.chunk_dict[chunk].SURFACE_PADDING.x > HexMetrics.chunk_width or
+                    chunk_screen_pos.y + grid.chunk_dict[chunk].SURFACE_PADDING.y < -HexMetrics.chunk_height or
+                    chunk_screen_pos.y + grid.chunk_dict[chunk].SURFACE_PADDING.y > HexMetrics.chunk_height):
+                draw = False
+
+            #if draw:
+            #    DISPLAYSURF.blit(grid.chunk_dict[chunk].surface, chunk_screen_pos)
+
+            DISPLAYSURF.blit(grid.chunk_dict[chunk].surface, chunk_screen_pos)
 
     old_player_chunk = player.chunk
     player.chunk = grid.chunk_dict[str(HexCoordinates().chunk_coords_containing_pos(player.position))]
@@ -171,11 +186,20 @@ while True:
 
     # Update ------------------------------------------------- #
     fps_counter = font.render(str(int(fpsClock.get_fps())), True, WHITE)
-    # player_chunk = font.render(str(player.chunk), True, WHITE)
+    player_chunk = font.render(str(player.chunk.coordinates), True, WHITE)
+    chunk_position = font.render(str(player.chunk.position), True, WHITE)
+    chunk_pos_plus = font.render(str(player.chunk.position + Vector2(HexMetrics.chunk_width, 0)), True, WHITE)
+    chunk_coord_plus = font.render(str(
+        HexCoordinates().from_position(player.chunk.position + Vector2(HexMetrics.chunk_width, 0))
+    ), True, WHITE)
     # player_cell_position = font.render(str(player.coordinates), True, WHITE)
     # player_position = font.render(str(player.position),True, WHITE)
-    DISPLAYSURF.blit(fps_counter, (50,50))
-    # DISPLAYSURF.blit(player_chunk, (50,100))
+    DISPLAYSURF.blit(fps_counter, (50, 50))
+    DISPLAYSURF.blit(chunk_position, (50, 100))
+    DISPLAYSURF.blit(player_chunk, (50, 150))
+
+    DISPLAYSURF.blit(chunk_pos_plus, (50, 200))
+    DISPLAYSURF.blit(chunk_coord_plus, (50, 250))
     DISPLAYSURF.blit(player_model, (CENTER.x - PLAYER_RADIUS, CENTER.y - PLAYER_RADIUS))
     # DISPLAYSURF.blit(player_cell_position, (50, 150))
     # DISPLAYSURF.blit(player_position, (50, 200))

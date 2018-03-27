@@ -3,10 +3,10 @@ from hex_metrics import *
 from hex_coordinates import *
 from hex_mesh import *
 from hex_cell import *
-#pygame.init()
+pygame.init()
 class HexChunk(object):
     # need a better way to get coordinates written so we don't need to init pygame twice
-    # font = pygame.font.Font(None, 30)
+    font = pygame.font.Font(None, 30)
 
     CHUNK_FOLDER = "chunk_data/"
     
@@ -39,7 +39,7 @@ class HexChunk(object):
     def update(self):
         self.triangulate()
         self.triangles_to_surface()
-        # self.render_coordinates()
+        self.render_coordinates()
         self.surface = pygame.Surface.convert_alpha(self.surface)
         self.enabled = False
 
@@ -114,7 +114,7 @@ class HexChunk(object):
 
     def render_coordinates(self):
         for cell in self.cells:
-            coordinate_surf = self.font.render(str(cell.coordinates), True, (0,0,0))
+            coordinate_surf = self.font.render(str(cell.coordinates), True, (255, 0, 0))
             self.surface.blit(coordinate_surf, HexMetrics().perturb(cell.position) - self.position + self.SURFACE_PADDING + Vector2(-25, -25))
 
     def serialize(self):

@@ -1,7 +1,8 @@
 from hex_chunk import *
 
+
 class ChunkPool(object):
-    POOL_SIZE = 12
+    POOL_SIZE = 15
     pool = []
 
     def __init__(self):

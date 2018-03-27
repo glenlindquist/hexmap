@@ -7,7 +7,7 @@ from pathlib import Path
 
 class HexGrid(object):
     def __init__(self):
-        #self.chunks = []
+        # self.chunks = []
         self.cell_count_x = 0
         self.cell_count_y = 0
         self.chunk_dict = {}
@@ -20,8 +20,10 @@ class HexGrid(object):
 
     # With chunk-pooling ------------------------------------- #
     def load_chunks(self, player):
+
         for offset in HexMetrics.chunk_offsets:
-            chunk_position = player.chunk.coordinates.to_position() + Vector2(offset[0], offset[1])
+            #chunk_position = player.chunk.coordinates.to_position() + Vector2(offset[0], offset[1])
+            chunk_position = player.chunk.position + Vector2(offset[0], offset[1])
             chunk_file = Path(HexChunk.CHUNK_FOLDER + str(HexCoordinates().from_position(chunk_position)))
             if str(HexCoordinates().from_position(chunk_position)) in self.chunk_dict:
                 # keep using the chunk from the dict of active chunks
@@ -39,10 +41,14 @@ class HexGrid(object):
                 # self.chunks.append(chunk)
                 self.chunk_dict[str(chunk.coordinates)] = chunk
 
+        print(len(self.chunk_dict))
+        for key in self.chunk_dict:
+            print(self.chunk_dict[key].coordinates)
+
     # Without chunk-pooling ---------------------------------- #
     # def load_chunks(self, player):
     #     for offset in HexMetrics.chunk_offsets:
-    #         chunk_position = player.chunk.to_position() + Vector2(offset[0], offset[1])
+    #         chunk_position = player.chunk.coordinates.to_position() + Vector2(offset[0], offset[1])
     #         chunk_file = Path(HexChunk.CHUNK_FOLDER + str(HexCoordinates().from_position(chunk_position)))
     #         if str(HexCoordinates().from_position(chunk_position)) in self.chunk_dict:
     #             # keep using the chunk from the dict of active chunks
@@ -51,24 +57,26 @@ class HexGrid(object):
     #             # load chunk from file
     #             chunk = HexChunk(chunk_position)
     #             chunk.deserialize()
-    #             self.chunks.append(chunk)
+    #             # self.chunks.append(chunk)
     #             self.chunk_dict[str(chunk.coordinates)] = chunk
     #         else:
     #             # create new chunk
     #             chunk = HexChunk(chunk_position)
     #             chunk.create_cells()
-    #             self.chunks.append(chunk)
+    #             # self.chunks.append(chunk)
     #             self.chunk_dict[str(chunk.coordinates)] = chunk
 
     def unload_chunks(self, player):
         chunks_to_remove = list(chunk for chunk in self.chunk_dict if
-                                abs(self.chunk_dict[chunk].position.x - player.chunk.coordinates.to_position().x) > HexMetrics.chunk_width or
-                                abs(self.chunk_dict[chunk].position.y - player.chunk.coordinates.to_position().y) > HexMetrics.chunk_height
+                                # Add 1 to account for rounding errors
+                                abs(self.chunk_dict[chunk].position.x - player.chunk.position.x) > (HexMetrics.chunk_width + 1) or
+                                abs(self.chunk_dict[chunk].position.y - player.chunk.position.y) > (HexMetrics.chunk_height + 1)
                                 )
         for chunk in chunks_to_remove:
             chunk_file = Path(HexChunk.CHUNK_FOLDER + chunk)
             if not chunk_file.is_file() or self.chunk_dict[chunk].changed:
                 self.chunk_dict[chunk].serialize()
+            print("Returning:", str(self.chunk_dict[chunk].coordinates))
             self.pool.return_to_pool(self.chunk_dict[chunk])
             del self.chunk_dict[chunk]
 
